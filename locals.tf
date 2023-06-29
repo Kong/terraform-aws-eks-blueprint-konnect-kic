@@ -60,7 +60,7 @@ locals {
     {
       name = "controller.ingressController.apiHostname"
       value = local.apiHostname
-    }
+    },
     {
       name  = "gateway.env.database"
       value = "off"

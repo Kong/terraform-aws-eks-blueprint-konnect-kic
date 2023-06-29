@@ -1,7 +1,7 @@
 ###########Namespace###########
 
 resource "kubernetes_namespace_v1" "kong" {
-  count = var.enable_kong_konnect && local.create_namespace && local.namespace != "kube-system" ? 1 : 0
+  count = var.enable_kong_konnect_kic && local.create_namespace && local.namespace != "kube-system" ? 1 : 0
 
   metadata {
     name = local.namespace
@@ -22,7 +22,7 @@ resource "kubernetes_namespace_v1" "kong" {
 ###########Service Account###########
 
 resource "kubernetes_service_account_v1" "kong" {
-  count = var.enable_kong_konnect && local.create_kubernetes_service_account ? 1 : 0
+  count = var.enable_kong_konnect_kic && local.create_kubernetes_service_account ? 1 : 0
   metadata {
     name        = local.service_account
 
@@ -39,11 +39,11 @@ module "kong_helm" {
   source           = "aws-ia/eks-blueprints-addon/aws"
   version          = "1.1.0"
 
-  create           = var.enable_kong_konnect
+  create           = var.enable_kong_konnect_kic
   chart            = local.name
   chart_version    = local.chart_version
   repository       = local.repository
-  description      = "Kong konnect"
+  description      = "Kong Konnect - KIC"
   namespace        = local.namespace
   create_namespace = false
 
@@ -64,7 +64,7 @@ module "kong_helm" {
 ###########IRSA###########
 
 module "kong_irsa" {
-  count   = var.enable_kong_konnect ? 1 : 0
+  count   = var.enable_kong_konnect_kic ? 1 : 0
   source  = "aws-ia/eks-blueprints-addon/aws"
   version = "1.1.0"
 
@@ -101,7 +101,7 @@ module "kong_irsa" {
 ###########Secret Store###########
 
 resource "kubectl_manifest" "secretstore" {
-  count = var.enable_kong_konnect ? 1 : 0
+  count = var.enable_kong_konnect_kic ? 1 : 0
   yaml_body  = <<YAML
 apiVersion: external-secrets.io/v1beta1
 kind: SecretStore
@@ -127,7 +127,7 @@ YAML
 ###########External Secret###########
 
 resource "kubectl_manifest" "secret" {
-  count = var.enable_kong_konnect ? 1 : 0
+  count = var.enable_kong_konnect_kic ? 1 : 0
   yaml_body  = <<YAML
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
