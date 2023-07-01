@@ -5,6 +5,7 @@ resource "kubernetes_namespace_v1" "kong" {
 
   metadata {
     name = local.namespace
+
   }
 
   timeouts {
@@ -19,10 +20,11 @@ resource "kubernetes_namespace_v1" "kong" {
   }
 }
 
-###########Service Account###########
+###########Service Accounts###########
 
 resource "kubernetes_service_account_v1" "kong" {
   count = var.enable_kong_konnect_kic && local.create_kubernetes_service_account ? 1 : 0
+
   metadata {
     name        = local.service_account
 
@@ -33,6 +35,8 @@ resource "kubernetes_service_account_v1" "kong" {
   automount_service_account_token = true
 }
 
+
+
 ###########Kong Helm Module##########
 
 module "kong_helm" {
@@ -40,7 +44,8 @@ module "kong_helm" {
   version          = "1.1.0"
 
   create           = var.enable_kong_konnect_kic
-  chart            = local.name
+  name             = "kong"
+  chart            = local.chart
   chart_version    = local.chart_version
   repository       = local.repository
   description      = "Kong Konnect - KIC"
@@ -124,7 +129,7 @@ YAML
   ]
 }
 
-###########External Secret###########
+# ##########External Secret###########
 
 resource "kubectl_manifest" "secret" {
   count = var.enable_kong_konnect_kic ? 1 : 0
@@ -145,10 +150,10 @@ spec:
   template:
     type: kubernetes.io/tls
   data:
-  - secretKey: kong_cert
+  - secretKey: tls.crt
     remoteRef:
       key: ${local.cert_secret_name}
-  - secretKey: kong_key
+  - secretKey: tls.key
     remoteRef:
       key: ${local.key_secret_name}
 YAML
