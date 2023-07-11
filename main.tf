@@ -23,7 +23,7 @@ resource "kubernetes_namespace_v1" "kong" {
 ###########AddOns for Cluster. Note the module name has addon"s"###########
 
 module "add_ons" {
-  source = "aws-ia/eks-blueprints-addons/aws"
+  source  = "aws-ia/eks-blueprints-addons/aws"
   version = "1.1.0"
 
   cluster_name      = var.cluster_name
@@ -39,10 +39,10 @@ module "add_ons" {
   }
 
   enable_external_secrets = true
-  // Following to ensure that the IRSA with which the External Secret Pod is running does not have any access. 
-  // Ideally, this should not use IRSA at all as its the property of `SecretStore` CRD
+  # Following to ensure that the IRSA with which the External Secret Pod is running does not have any access. 
+  # Ideally, this should not use IRSA at all as its the property of `SecretStore` CRD
   external_secrets_secrets_manager_arns = []
-  external_secrets_ssm_parameter_arns = []
+  external_secrets_ssm_parameter_arns   = []
 }
 
 ##########Service Account for External Secret###########
@@ -97,7 +97,7 @@ module "external_secret_irsa" {
 ###########Secret Store###########
 
 resource "kubectl_manifest" "secretstore" {
-  yaml_body  = <<YAML
+  yaml_body = <<YAML
 apiVersion: external-secrets.io/v1beta1
 kind: SecretStore
 metadata:
@@ -116,7 +116,7 @@ YAML
   depends_on = [
     module.external_secret_irsa,
     kubernetes_service_account_v1.external_secret_sa,
-    module.add_ons // Dont remove this dependency
+    module.add_ons # Dont remove this dependency
   ]
 }
 
@@ -154,12 +154,12 @@ YAML
 
 resource "time_sleep" "wait_for_konnect_tls_secret" {
   create_duration = "3s"
-  depends_on = [kubectl_manifest.secret]
+  depends_on      = [kubectl_manifest.secret]
 }
 
 module "kong_helm" {
-  source           = "aws-ia/eks-blueprints-addon/aws"
-  version          = "1.1.0"
+  source  = "aws-ia/eks-blueprints-addon/aws"
+  version = "1.1.0"
 
   create           = var.enable_kong_konnect_kic
   chart            = local.chart
@@ -170,8 +170,8 @@ module "kong_helm" {
   namespace        = local.namespace
   create_namespace = false
 
-  set              = local.set_values
-  values           = local.values
+  set    = local.set_values
+  values = local.values
 
   tags = var.tags
   depends_on = [
