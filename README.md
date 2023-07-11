@@ -30,6 +30,7 @@ See [blueprint-kong-samples](https://github.com/aws-samples/terraform-eks-bluepr
 | <a name="requirement_helm"></a> [helm](#requirement\_helm) | >= 2.4.1 |
 | <a name="requirement_kubectl"></a> [kubectl](#requirement\_kubectl) | >= 1.14 |
 | <a name="requirement_kubernetes"></a> [kubernetes](#requirement\_kubernetes) | >= 2.10 |
+| <a name="requirement_time"></a> [time](#requirement\_time) | 0.9.1 |
 
 ## Providers
 
@@ -38,30 +39,31 @@ See [blueprint-kong-samples](https://github.com/aws-samples/terraform-eks-bluepr
 | <a name="provider_aws"></a> [aws](#provider\_aws) | >= 3.72 |
 | <a name="provider_kubectl"></a> [kubectl](#provider\_kubectl) | >= 1.14 |
 | <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | >= 2.10 |
-| <a name="provider_time"></a> [time](#provider\_time) | n/a |
+| <a name="provider_time"></a> [time](#provider\_time) | 0.9.1 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
-
-| <a name="module_kong"></a> [kong](#module\_kong) | aws-ia/eks-blueprints-addon/aws | 1.1.0 |
-| <a name="add_ons"></a> [add_ons](#module\_add_ons) | aws-ia/eks-blueprints-addon/aws | 1.1.0 |
-| <a name="external_secret_irsa"></a> [external_secret_irsa](#module\_external_secret_irsa) | aws-ia/eks-blueprints-addon/aws | 1.1.0 |
+| <a name="module_add_ons"></a> [add\_ons](#module\_add\_ons) | aws-ia/eks-blueprints-addons/aws | 1.1.0 |
+| <a name="module_external_secret_irsa"></a> [external\_secret\_irsa](#module\_external\_secret\_irsa) | aws-ia/eks-blueprints-addon/aws | 1.1.0 |
+| <a name="module_kong_helm"></a> [kong\_helm](#module\_kong\_helm) | aws-ia/eks-blueprints-addon/aws | 1.1.0 |
 
 ## Resources
 
 | Name | Type |
 |------|------|
-| [kubernetes_service_account_v1.external_secret_sa](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/service_account_v1) | resource |
 | [kubectl_manifest.secret](https://registry.terraform.io/providers/gavinbunney/kubectl/latest/docs/resources/manifest) | resource |
 | [kubectl_manifest.secretstore](https://registry.terraform.io/providers/gavinbunney/kubectl/latest/docs/resources/manifest) | resource |
+| [kubernetes_namespace_v1.kong](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/namespace_v1) | resource |
+| [kubernetes_service_account_v1.external_secret_sa](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/service_account_v1) | resource |
+| [time_sleep.this](https://registry.terraform.io/providers/hashicorp/time/0.9.1/docs/resources/sleep) | resource |
+| [time_sleep.wait_for_konnect_tls_secret](https://registry.terraform.io/providers/hashicorp/time/0.9.1/docs/resources/sleep) | resource |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
+| [aws_iam_policy_document.kong_external_secret_secretstore](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_kms_alias.secret_manager](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/kms_alias) | data source |
 | [aws_partition.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/partition) | data source |
 | [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
-| [time_sleep.this](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) | resource |
-| [aws_kms_alias.secret_manager](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/kms_alias) | data source |
-| [aws_iam_policy_document.kong_secretstore](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 
 ## Inputs
 
@@ -72,6 +74,7 @@ See [blueprint-kong-samples](https://github.com/aws-samples/terraform-eks-bluepr
 | <a name="input_cluster_version"></a> [cluster\_version](#input\_cluster\_version) | Kubernetes `<major>.<minor>` version to use for the EKS cluster (i.e.: `1.24`) | `string` | n/a | yes |
 | <a name="input_create_delay_dependencies"></a> [create\_delay\_dependencies](#input\_create\_delay\_dependencies) | Dependency attribute which must be resolved before starting the `create_delay_duration` | `list(string)` | `[]` | no |
 | <a name="input_create_delay_duration"></a> [create\_delay\_duration](#input\_create\_delay\_duration) | The duration to wait before creating resources | `string` | `"30s"` | no |
+| <a name="input_enable_kong_konnect_kic"></a> [enable\_kong\_konnect\_kic](#input\_enable\_kong\_konnect\_kic) | Enable Kong add-on | `bool` | `false` | no |
 | <a name="input_kong_config"></a> [kong\_config](#input\_kong\_config) | Kong addon configuration values | `any` | `{}` | no |
 | <a name="input_oidc_provider_arn"></a> [oidc\_provider\_arn](#input\_oidc\_provider\_arn) | The ARN of the cluster OIDC Provider | `string` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | A map of tags to add to all resources | `map(string)` | `{}` | no |
