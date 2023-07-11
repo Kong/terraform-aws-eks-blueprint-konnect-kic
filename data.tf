@@ -18,7 +18,7 @@ data "aws_kms_alias" "secret_manager" {
 }
 
 
-data "aws_iam_policy_document" "kong_secretstore" {
+data "aws_iam_policy_document" "kong_external_secret_secretstore" {
   statement {
     sid = "1"
 
