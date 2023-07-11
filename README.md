@@ -1,4 +1,3 @@
-<!-- BEGIN_TF_DOCS -->
 # Kong Konnect KIC - EKS Blueprint AddOn
 
 <p align="center">
@@ -21,6 +20,7 @@ See the [Kong Helm Chart](https://github.com/Kong/charts)
 
 See [blueprint-kong-samples](https://github.com/aws-samples/terraform-eks-blueprints-kong-samples).
 
+<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
 
 | Name | Version |
@@ -83,4 +83,4 @@ See [blueprint-kong-samples](https://github.com/aws-samples/terraform-eks-bluepr
 | Name | Description |
 |------|-------------|
 | <a name="output_namespace"></a> [namespace](#output\_namespace) | Namespace in which kong is being created |
-<!-- END_TF_DOCS -->
+<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
