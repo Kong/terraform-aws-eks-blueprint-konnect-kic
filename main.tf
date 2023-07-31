@@ -43,6 +43,16 @@ module "add_ons" {
   # Ideally, this should not use IRSA at all as its the property of `SecretStore` CRD
   external_secrets_secrets_manager_arns = []
   external_secrets_ssm_parameter_arns   = []
+
+  external_secrets = {
+    wait = true
+    set = [
+      {
+        name  = "webhook.port"
+        value = "9443"
+      }
+    ]
+  }
 }
 
 ##########Service Account for External Secret###########
@@ -50,7 +60,7 @@ module "add_ons" {
 resource "kubernetes_service_account_v1" "external_secret_sa" {
   metadata {
     name        = local.external_secret_service_account_name
-    namespace   = local.namespace
+    namespace   = try(kubernetes_namespace_v1.kong[0].metadata[0].name, local.namespace)
     annotations = { "eks.amazonaws.com/role-arn" : module.external_secret_irsa.iam_role_arn }
   }
 
@@ -113,6 +123,8 @@ spec:
           serviceAccountRef:
             name: ${local.external_secret_service_account_name}
 YAML
+  wait      = true
+
   depends_on = [
     module.external_secret_irsa,
     kubernetes_service_account_v1.external_secret_sa,
@@ -123,7 +135,7 @@ YAML
 ###########External Secret###########
 
 resource "kubectl_manifest" "secret" {
-  yaml_body  = <<YAML
+  yaml_body = <<YAML
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
@@ -137,8 +149,8 @@ spec:
   target:
     name: ${local.kong_external_secrets}
     creationPolicy: Owner
-  template:
-    type: kubernetes.io/tls
+    template:
+      type: kubernetes.io/tls
   data:
   - secretKey: tls.crt
     remoteRef:
@@ -147,15 +159,12 @@ spec:
     remoteRef:
       key: ${local.key_secret_name}
 YAML
+  wait      = true
+
   depends_on = [kubectl_manifest.secretstore]
 }
 
 ###########Kong Helm Module##########
-
-resource "time_sleep" "wait_for_konnect_tls_secret" {
-  create_duration = "3s"
-  depends_on      = [kubectl_manifest.secret]
-}
 
 module "kong_helm" {
   source  = "aws-ia/eks-blueprints-addon/aws"
@@ -176,8 +185,7 @@ module "kong_helm" {
   tags = var.tags
   depends_on = [
     module.add_ons,
-    kubectl_manifest.secret,
-    time_sleep.wait_for_konnect_tls_secret
+    kubectl_manifest.secret
   ]
 
 }
