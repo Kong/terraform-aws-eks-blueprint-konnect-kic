@@ -58,7 +58,6 @@ See [blueprint-kong-samples](https://github.com/aws-samples/terraform-eks-bluepr
 | [kubernetes_namespace_v1.kong](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/namespace_v1) | resource |
 | [kubernetes_service_account_v1.external_secret_sa](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/service_account_v1) | resource |
 | [time_sleep.this](https://registry.terraform.io/providers/hashicorp/time/0.9.1/docs/resources/sleep) | resource |
-| [time_sleep.wait_for_konnect_tls_secret](https://registry.terraform.io/providers/hashicorp/time/0.9.1/docs/resources/sleep) | resource |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
 | [aws_iam_policy_document.kong_external_secret_secretstore](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_kms_alias.secret_manager](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/kms_alias) | data source |
