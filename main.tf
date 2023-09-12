@@ -32,11 +32,11 @@ module "add_ons" {
   oidc_provider_arn = var.oidc_provider_arn
 
   # EKS Add-on
-  eks_addons = {
-    coredns    = {}
-    vpc-cni    = {}
-    kube-proxy = {}
-  }
+  # eks_addons = {
+  #   coredns    = {}
+  #   vpc-cni    = {}
+  #   kube-proxy = {}
+  # }
 
   enable_external_secrets = true
   # Following to ensure that the IRSA with which the External Secret Pod is running does not have any access. 
@@ -170,7 +170,7 @@ module "kong_helm" {
   source  = "aws-ia/eks-blueprints-addon/aws"
   version = "1.1.0"
 
-  create           = var.enable_kong_konnect_kic
+  create           = true
   chart            = local.chart
   name             = local.name
   chart_version    = local.chart_version
