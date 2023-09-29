@@ -73,7 +73,6 @@ See [blueprint-kong-samples](https://github.com/aws-samples/terraform-eks-bluepr
 | <a name="input_cluster_version"></a> [cluster\_version](#input\_cluster\_version) | Kubernetes `<major>.<minor>` version to use for the EKS cluster (i.e.: `1.24`) | `string` | n/a | yes |
 | <a name="input_create_delay_dependencies"></a> [create\_delay\_dependencies](#input\_create\_delay\_dependencies) | Dependency attribute which must be resolved before starting the `create_delay_duration` | `list(string)` | `[]` | no |
 | <a name="input_create_delay_duration"></a> [create\_delay\_duration](#input\_create\_delay\_duration) | The duration to wait before creating resources | `string` | `"30s"` | no |
-| <a name="input_enable_kong_konnect_kic"></a> [enable\_kong\_konnect\_kic](#input\_enable\_kong\_konnect\_kic) | Enable Kong add-on | `bool` | `false` | no |
 | <a name="input_kong_config"></a> [kong\_config](#input\_kong\_config) | Kong addon configuration values | `any` | `{}` | no |
 | <a name="input_oidc_provider_arn"></a> [oidc\_provider\_arn](#input\_oidc\_provider\_arn) | The ARN of the cluster OIDC Provider | `string` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | A map of tags to add to all resources | `map(string)` | `{}` | no |

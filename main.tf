@@ -24,7 +24,7 @@ resource "kubernetes_namespace_v1" "kong" {
 
 module "add_ons" {
   count = local.enable_external_secrets ? 1 : 0
-  
+
   source  = "aws-ia/eks-blueprints-addons/aws"
   version = "1.1.0"
 

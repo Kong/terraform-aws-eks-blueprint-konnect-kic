@@ -23,7 +23,7 @@ locals {
   secret_volume_length  = try(length(yamldecode(var.kong_config.values[0])["secretVolumes"]), 0)
 
   enable_external_secrets = try(var.kong_config.add_ons.enable_external_secrets, true)
-  
+
   external_secret_service_account_name                = "external-secret-irsa"
   external_secrets_irsa_role_name                     = "external-secret-irsa"
   external_secrets_irsa_role_name_use_prefix          = true
